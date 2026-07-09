@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "./lib/supabaseClient";
 import { signIn, signOut, signUp } from "./api/auth";
+import MovieSearch from "./components/MovieSearch";
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -11,6 +12,7 @@ function App() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  // 로그인
   const handleSignUp = async () => {
     console.log("email:", email, "password:", password);
     try {
@@ -65,62 +67,67 @@ function App() {
   if (loading) return <p>로딩 중...</p>;
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow">
+    <>
       {session ? (
-        <div className="text-center space-y-4">
-          <p className="text-lg font-bold text-gray-800">
-            환영합니다, {session.user.email}님!
-          </p>
-          <button
-            onClick={handleSignOut}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-          >
-            로그아웃
-          </button>
+        <div className="max-w-4xl mx-auto mt-10 px-4">
+          <div className="flex items-center justify-between mb-6 p-4 bg-white rounded-lg shadow">
+            <p className="text-lg font-bold text-gray-800">
+              환영합니다, {session.user.email}님!
+            </p>
+            <button
+              onClick={handleSignOut}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+            >
+              로그아웃
+            </button>
+          </div>
+          <MovieSearch />
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow">
           <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">
             로그인
           </h1>
 
           {error && (
-            <p className="text-red-500 text-sm bg-red-50 p-2 rounded">
+            <p className="text-red-500 text-sm bg-red-50 p-2 rounded mb-3">
               {error}
             </p>
           )}
 
-          <input
-            className="border rounded px-3 py-2 w-full"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="이메일"
-          />
-          <input
-            className="border rounded px-3 py-2 w-full"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="비밀번호"
-          />
-          <div className="flex gap-2">
-            <button
-              className="flex-1 bg-gray-100 px-4 py-2 rounded hover:bg-gray-200"
-              onClick={handleSignUp}
-            >
-              회원가입
-            </button>
-            <button
-              className="flex-1 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              onClick={handleSignIn}
-            >
-              로그인
-            </button>
+          <div className="space-y-3">
+            <input
+              className="border rounded px-3 py-2 w-full"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="이메일"
+            />
+            <input
+              className="border rounded px-3 py-2 w-full"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="비밀번호"
+            />
+            <div className="flex gap-2">
+              <button
+                className="flex-1 bg-gray-100 px-4 py-2 rounded hover:bg-gray-200 transition"
+                onClick={handleSignUp}
+              >
+                회원가입
+              </button>
+              <button
+                className="flex-1 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                onClick={handleSignIn}
+              >
+                로그인
+              </button>
+            </div>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
